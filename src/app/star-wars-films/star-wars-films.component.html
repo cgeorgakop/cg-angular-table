@@ -1,0 +1,3 @@
+<app-cg-table [tableSource]="films" [tableColumns]="filmsColumns" [tableIdColumnName]="'uid'" [loading]="loading"
+    [searchable]="true" (changeColumnOrder)="reorderColumns($event)">
+</app-cg-table>

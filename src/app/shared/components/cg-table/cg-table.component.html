@@ -1,0 +1,42 @@
+<div class="search-container">
+    <app-search-textbox (textChange)="filterData($event)" [placeholder]="'Search table'" class="search">
+    </app-search-textbox>
+</div>
+<table>
+    <tr cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="dropColumn($event)">
+        <th cdkDrag *ngFor="let col of tableColumns; let i=index; let isLast=last; trackBy:propertyIdentify"
+            [ngStyle]="{'text-align': col.align}" class="header">
+            <span cdkDragHandle class="drag-handle">
+                <span class="dot darker one"></span>
+                <span class="dot darker two"></span>
+                <span class="dot darker three"></span>
+                <span class="dot darker four"></span>
+                <span class="dot darker five"></span>
+                <span class="dot darker six"></span>
+            </span>
+            <span>{{col.columnTitle}}</span>
+            <span class="sort-arrow"
+                [ngClass]="{'sorted-ascending': sortColumn===col.columnName && sortOrder==='asc', 'sorted-descending': sortColumn===col.columnName && sortOrder==='desc'}"
+                [appSortTableColumn]="col.columnName" [appSortTableDirection]="sortOrder"
+                (appSortTableChange)="onSort($event)"></span>
+            <div #resizer *ngIf="!isLast" class="resize-handle"></div>
+        </th>
+    </tr>
+    <tr *ngIf="loading">
+        <td [attr.colspan]="tableColumns.length" class="padding-20">
+            <div class="loading-spinner large margin-auto"></div>
+        </td>
+    </tr>
+    <ng-container *ngIf="!loading && tableData.length">
+        <tr *ngFor="let dataRow of tableData; trackBy:rowIdentify">
+            <td *ngFor="let dataCell of dataRow; let i=index" [ngStyle]="{'text-align': tableColumns[i].align}">
+                {{dataCell}}
+            </td>
+        </tr>
+    </ng-container>
+    <tr *ngIf="!loading && !tableData.length">
+        <td [attr.colspan]="tableColumns.length" class="align-center">
+            No results!
+        </td>
+    </tr>
+</table>
